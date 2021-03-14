@@ -35,7 +35,7 @@ throbber_t start_throbber(const unsigned x, const unsigned y, const char* color)
 	args->stop = false;
 	throbber_t t;
 	t.args = args;
-	pthread_create(&t.id,NULL,_throb,args);
+	pthread_create(&t.id, NULL, _throb, args);
 	return t;
 }
 
@@ -76,7 +76,7 @@ void stop_throbber(throbber_t t){
 	fputs("  ", stdout);
 	fputs(safe_exit, stdout);
 	fflush(stdout);
-	pthread_join(t.id,NULL);
+	pthread_join(t.id, NULL);
 	usleep(1000L);
 	return;
 }
