@@ -16,27 +16,28 @@
 
 struct _throb_args{
 	unsigned x,y;
-	const char* color;
+	const char *color;
 	pthread_mutex_t lock;
 	bool stop;
 };
 
 typedef struct{
 	pthread_t id;
-	struct _throb_args* args;
+	struct _throb_args *args;
 }throbber_t;
 
-void* _throb(void*);
+void *_throb(void*);
 
-throbber_t start_throbber(const unsigned x, const unsigned y, const char* color){
-	struct _throb_args* args = malloc(sizeof(struct _throb_args));
+throbber_t start_throbber(const unsigned x, const unsigned y, const char *color){
+	struct _throb_args *args = malloc(sizeof(struct _throb_args));
 	args->x = x;
 	args->y = y;
 	args->color = color;
 	args->stop = false;
 	if(pthread_mutex_init(&args->lock, NULL)){
-		puts("Throbber initialization failed");
-		exit(1);
+		fputs("Throbber initialization failed", stderr);
+		free(args);
+		return (throbber_t){-1, NULL};
 	}
 	throbber_t t;
 	t.args = args;
@@ -44,11 +45,11 @@ throbber_t start_throbber(const unsigned x, const unsigned y, const char* color)
 	return t;
 }
 
-void* _throb(void* args){
-	struct _throb_args* targs = args;
+void* _throb(void *args){
+	struct _throb_args *targs = args;
 	unsigned x = targs->x;
 	unsigned y = targs->y;
-	const char* color = targs->color;
+	const char *color = targs->color;
 	const char *frames[] = {
 		"⠯⠃",
 		"⠏⠇",
